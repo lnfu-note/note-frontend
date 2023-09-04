@@ -1,0 +1,73 @@
+import { Link } from 'react-router-dom'
+import { useAuth } from './AuthContext'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const url = import.meta.env.VITE_BACKEND_HOST + '/api/v1/login'
+
+
+const Login = () => {
+    const { login, isAuthenticated } = useAuth();
+
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
+    const [hint, setHint] = useState({ result: 'Fail', message: ' ' })
+
+    const navigate = useNavigate()
+
+    const submit = async (event) => {
+        event.preventDefault()
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name,
+                password: password
+            })
+        })
+
+        const result = await response.json()
+
+        setHint(result);
+        if (result.result === 'Success') {
+            login(result.token)
+            setName("")
+            setPassword("")
+            navigate('/')
+        }
+    }
+
+    return <>
+        {!isAuthenticated() ?
+            <div className='mx-auto my-40 w-full max-w-2xl text-2xl'>
+                <form onSubmit={submit} className='bg-gray-100 shadow-md rounded px-28 pt-20 pb-16'>
+                    <div className='mb-4'>
+                        <input className=' shadow border rounded w-full py-2 px-3' type='input' id='name' defaultValue={name} placeholder='帳號' onChange={(event) => { setName(event.target.value) }} />
+                    </div>
+
+                    <div className='mb-6'>
+                        <input className=' shadow border rounded w-full py-2 px-3' type='password' id='password' defaultValue={password} placeholder='密碼' onChange={(event) => { setPassword(event.target.value) }} />
+                    </div>
+
+                    <div className='mb-3 flex'>
+                        <button className='bg-green-600 text-white w-full py-2' type='submit'>登入</button>
+                    </div>
+
+                    <div className={'mb-1  text-center whitespace-pre ' + (hint.result === 'Fail' ? 'text-red-500' : 'text-green-500')}>{hint.message}</div>
+
+                    <div className='flex'>
+                        <div className='text-gray-400 mx-auto text-lg'>
+                            還沒<Link to='/account/register' className="underline hover:text-blue-500">註冊</Link>？
+                        </div>
+                    </div>
+                </form>
+            </div>
+            : <div>已登入</div>
+        }
+    </>
+}
+
+export default Login

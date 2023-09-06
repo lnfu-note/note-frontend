@@ -50,6 +50,7 @@ const NoteEditor = () => {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json",
+                            "Authorization": token
                         },
                     })
                     return response2.json()

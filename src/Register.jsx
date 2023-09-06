@@ -37,11 +37,11 @@ const Register = (props) => {
         <div className='mx-auto my-40 w-full max-w-2xl text-2xl'>
             <form onSubmit={submit} className='bg-gray-100 shadow-md rounded px-28 pt-20 pb-16'>
                 <div className='mb-4'>
-                    <input className=' shadow border rounded w-full py-2 px-3' type='input' id='name' defaultValue={name} placeholder='帳號' onChange={(event) => { setName(event.target.value) }} />
+                    <input className=' shadow border rounded w-full py-2 px-3' type='input' id='name' value={name} placeholder='帳號' onChange={(event) => { setName(event.target.value) }} />
                 </div>
 
                 <div className='mb-6'>
-                    <input className=' shadow border rounded w-full py-2 px-3' type='password' id='password' defaultValue={password} placeholder='密碼' onChange={(event) => { setPassword(event.target.value) }} />
+                    <input className=' shadow border rounded w-full py-2 px-3' type='password' id='password' value={password} placeholder='密碼' onChange={(event) => { setPassword(event.target.value) }} />
                 </div>
 
                 <div className='mb-3 flex'>

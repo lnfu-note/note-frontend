@@ -15,6 +15,12 @@ const Note = () => {
 
     const url = import.meta.env.VITE_BACKEND_HOST + '/api/v1/notes/' + noteId
 
+    const getFormattedDate = (dbDate) => {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const date = new Date(dbDate)
+        return months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2)
+    }
+
     useEffect(() => {
         fetch(url, {
             method: 'GET',
@@ -22,21 +28,20 @@ const Note = () => {
                 "Content-Type": "application/json",
                 "Authorization": token
             },
-        }).then(response => response.json()).then(data => {
+        }).then(response => response.json()).then(res => {
 
-            if (data.result === 'Success') {
-                setTitle(data.data.title)
-                setBody(data.data.body)
-                setTags(data.data.tags)
+            if (res.result === 'Success') {
+                setTitle(res.data.title)
+                setBody(res.data.body)
+                setTags(res.data.tags)
 
-                const creationDateRaw = new Date(data.data.created_at)
+                const creationDateRaw = new Date(res.data.created_at)
                 setCreationDate(creationDateRaw.getFullYear() + '.' + ('0' + creationDateRaw.getMonth()).slice(-2) + '.' + ('0' + creationDateRaw.getDay()).slice(-2))
 
-                const lastModifiedDateRaw = new Date(data.data.last_modified_at)
-                setLastModifiedDate(lastModifiedDateRaw.getFullYear() + '.' + ('0' + lastModifiedDateRaw.getMonth()).slice(-2) + '.' + ('0' + lastModifiedDateRaw.getDay()).slice(-2) + ' ' + ('0' + lastModifiedDateRaw.getHours()).slice(-2) + ':' + ('0' + lastModifiedDateRaw.getMinutes()).slice(-2))
+                setLastModifiedDate(getFormattedDate(res.data.last_modified_at))
             }
             else {
-                setError(data.message)
+                setError(res.message)
             }
         })
 

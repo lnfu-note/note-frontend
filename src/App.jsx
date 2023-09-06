@@ -30,9 +30,11 @@ function App() {
             </Route>
 
             <Route path="notes" element={<NoteList />} />
-            <Route path="/notes/:noteId" element={<Note />} />
+            <Route path="notes/:noteId" element={<Note />} />
 
             <Route path="tags" element={<TagList />} />
+            <Route path="tags/:tagId" element={<NoteList />} />
+
           </Routes>
 
         </div>
